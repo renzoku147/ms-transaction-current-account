@@ -1,5 +1,6 @@
 package com.everis.mstransactioncurrentaccount.service;
 
+import com.everis.mstransactioncurrentaccount.entity.CurrentAccount;
 import com.everis.mstransactioncurrentaccount.entity.TransactionCurrentAccount;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,5 +16,10 @@ public interface TransactionCurrentAccountService {
 
     Mono<Boolean> delete(String t);
 
-    Flux<TransactionCurrentAccount> findByCurrentAccountIdCustomer(String id);
+    Mono<Long> countMovements(String t);
+
+    Mono<CurrentAccount> findSavingAccountById(String id);
+
+    Mono<CurrentAccount> updateSavingAccount(CurrentAccount sa);
+
 }

@@ -34,5 +34,7 @@ public class TransactionCurrentAccount {
     @NotNull
     private Double transactionAmount;
 
+    private Double commissionAmount;
+
     private LocalDateTime transactionDateTime;
 }

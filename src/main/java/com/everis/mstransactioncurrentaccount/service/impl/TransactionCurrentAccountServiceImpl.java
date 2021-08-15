@@ -1,15 +1,21 @@
 package com.everis.mstransactioncurrentaccount.service.impl;
 
+import com.everis.mstransactioncurrentaccount.entity.CurrentAccount;
 import com.everis.mstransactioncurrentaccount.entity.TransactionCurrentAccount;
 import com.everis.mstransactioncurrentaccount.repository.TransactionCurrentAccountRepository;
 import com.everis.mstransactioncurrentaccount.service.TransactionCurrentAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 public class TransactionCurrentAccountServiceImpl implements TransactionCurrentAccountService {
+
+    WebClient webClient = WebClient.create("http://localhost:8887/ms-current-account/current/currentAccount");
+
     @Autowired
     TransactionCurrentAccountRepository transactionCurrentAccountRepository;
 
@@ -41,7 +47,25 @@ public class TransactionCurrentAccountServiceImpl implements TransactionCurrentA
     }
 
     @Override
-    public Flux<TransactionCurrentAccount> findByCurrentAccountIdCustomer(String id){
-        return transactionCurrentAccountRepository.findByCurrentAccount_Id(id);
-    };
+    public Mono<Long> countMovements(String t) {
+        return transactionCurrentAccountRepository.findByCurrentAccountId(t).count();
+    }
+
+    @Override
+    public Mono<CurrentAccount> findSavingAccountById(String id) {
+        return webClient.get().uri("/find/{id}", id)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(CurrentAccount.class);
+    }
+
+    @Override
+    public Mono<CurrentAccount> updateSavingAccount(CurrentAccount sa) {
+        return webClient.put().uri("/update", sa.getId())
+                .accept(MediaType.APPLICATION_JSON)
+                .syncBody(sa)
+                .retrieve()
+                .bodyToMono(CurrentAccount.class);
+    }
+
 }

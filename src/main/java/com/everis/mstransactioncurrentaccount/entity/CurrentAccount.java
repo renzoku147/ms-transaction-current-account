@@ -1,31 +1,29 @@
 package com.everis.mstransactioncurrentaccount.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 public class CurrentAccount {
-    @Id
     private String id;
 
-    @NotNull
     private Customer customer;
 
-    @NotNull
+    private String cardNumber;
+
     private List<Person> holders;
 
     private List<Person> signers;
 
-    @NotNull
-    private Double maintenanceCommission;
+    private Integer freeTransactions;
 
-    @NotNull
+    private Double commissionTransactions;
+
+    private Double commissionMaintenance;
+
     private Double balance;
+
+    private LocalDateTime date;
 }

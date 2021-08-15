@@ -6,5 +6,5 @@ import reactor.core.publisher.Flux;
 
 public interface TransactionCurrentAccountRepository extends ReactiveMongoRepository<TransactionCurrentAccount, String> {
 
-    Flux<TransactionCurrentAccount> findByCurrentAccount_Id(String id);
+    Flux<TransactionCurrentAccount> findByCurrentAccountId(String id);
 }
