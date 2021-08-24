@@ -5,12 +5,14 @@ import com.everis.mstransactioncurrentaccount.service.TransactionCurrentAccountS
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RefreshScope
@@ -30,6 +32,21 @@ public class TransactionCurrentAccountController {
     @GetMapping("/find/{id}")
     public Mono<TransactionCurrentAccount> findById(@PathVariable String id){
         return transactionCurrentAccountService.findById(id);
+    }
+
+    @GetMapping("/checkAllTransactions/{numberCard}")
+    public Flux<TransactionCurrentAccount> findAllTransactions(@PathVariable String numberCard){
+        return transactionCurrentAccountService.findByCurrentAccountCardNumber(numberCard);
+    }
+
+    @GetMapping("/checkAllCommissions/{numberCard}/{from}/{to}")
+    public Flux<TransactionCurrentAccount> findAllCommissions(@PathVariable String numberCard,
+                                                         @PathVariable(name = "from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+                                                         @PathVariable(name = "to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to){
+        return transactionCurrentAccountService.findByCurrentAccountCardNumber(numberCard)
+                .filter(ft -> ft.getTransactionDateTime().toLocalDate().isAfter(from)
+                        && ft.getTransactionDateTime().toLocalDate().isBefore(to)
+                        && ft.getCommissionAmount() > 0);
     }
 
     @PostMapping("/create")

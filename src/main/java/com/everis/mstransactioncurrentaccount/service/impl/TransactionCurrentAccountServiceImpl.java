@@ -68,4 +68,9 @@ public class TransactionCurrentAccountServiceImpl implements TransactionCurrentA
                 .bodyToMono(CurrentAccount.class);
     }
 
+    @Override
+    public Flux<TransactionCurrentAccount> findByCurrentAccountCardNumber(String cardNumber) {
+        return transactionCurrentAccountRepository.findByCurrentAccountCardNumber(cardNumber);
+    }
+
 }

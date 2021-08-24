@@ -22,4 +22,6 @@ public interface TransactionCurrentAccountService {
 
     Mono<CurrentAccount> updateSavingAccount(CurrentAccount sa);
 
+    Flux<TransactionCurrentAccount> findByCurrentAccountCardNumber(String cardNumber);
+
 }
